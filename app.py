@@ -6,20 +6,11 @@ import joblib
 import streamlit as st
 
 
-# =========================================================
-# PAGE CONFIGURATION
-# =========================================================
-
 st.set_page_config(
     page_title="Fake News Detector",
     page_icon="📰",
     layout="wide"
 )
-
-
-# =========================================================
-# CUSTOM CSS
-# =========================================================
 
 st.markdown("""
 <style>
@@ -121,10 +112,6 @@ h2, h3 {
 """, unsafe_allow_html=True)
 
 
-# =========================================================
-# LOAD MODEL AND VECTORIZER
-# =========================================================
-
 @st.cache_resource
 def load_model():
     model = joblib.load("model/fake_news_model.pkl")
@@ -139,10 +126,6 @@ except Exception as e:
     st.stop()
 
 
-# =========================================================
-# SESSION STATE
-# =========================================================
-
 if "history" not in st.session_state:
     st.session_state.history = []
 
@@ -152,10 +135,6 @@ if "news_text_input" not in st.session_state:
 if "show_paste_message" not in st.session_state:
     st.session_state.show_paste_message = False
 
-
-# =========================================================
-# SAMPLE NEWS
-# =========================================================
 
 real_news = (
     "The Reserve Bank of India announced that it will keep "
@@ -171,10 +150,6 @@ fake_news = (
     "hospital to provide this miracle drink to all citizens."
 )
 
-
-# =========================================================
-# BUTTON CALLBACKS
-# =========================================================
 
 def load_article(article):
     st.session_state.news_text_input = article
@@ -192,12 +167,7 @@ def clear_article():
     st.session_state.news_text_input = ""
     st.session_state.show_paste_message = False
     st.session_state.pop("last_prediction", None)
-
-
-# =========================================================
-# TEXT PREPROCESSING
-# =========================================================
-
+    
 def clean_text(text):
     text = text.lower()
     text = re.sub(r"http\S+|www\S+|https\S+", "", text)
@@ -205,10 +175,6 @@ def clean_text(text):
     text = re.sub(r"\s+", " ", text)
     return text.strip()
 
-
-# =========================================================
-# HERO HEADER
-# =========================================================
 
 st.markdown("""
 <div class="hero">
@@ -220,10 +186,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-
-# =========================================================
-# MODEL INFORMATION
-# =========================================================
 
 with st.expander("🤖 About the Model"):
 
@@ -240,11 +202,6 @@ with st.expander("🤖 About the Model"):
 
     st.write("**Training Articles:** 35,918")
     st.write("**Testing Articles:** 8,980")
-
-
-# =========================================================
-# EXAMPLE NEWS OPTIONS
-# =========================================================
 
 st.markdown("### 🧪 Choose Your News Input")
 
@@ -282,10 +239,6 @@ if st.session_state.show_paste_message:
     st.info("You can now paste your own news article below.")
 
 
-# =========================================================
-# NEWS INPUT
-# =========================================================
-
 st.markdown("### 📰 Enter News Article")
 
 news_text = st.text_area(
@@ -311,9 +264,6 @@ with col2:
     )
 
 
-# =========================================================
-# ANALYZE NEWS
-# =========================================================
 
 if analyze_button:
 
@@ -370,11 +320,7 @@ if analyze_button:
 
             except Exception as e:
                 st.error(f"Prediction error: {e}")
-
-
-# =========================================================
-# DISPLAY PREDICTION RESULT
-# =========================================================
+                
 
 if "last_prediction" in st.session_state:
 
@@ -452,10 +398,6 @@ if "last_prediction" in st.session_state:
     st.bar_chart(chart_data)
 
 
-# =========================================================
-# PREDICTION HISTORY
-# =========================================================
-
 if st.session_state.history:
 
     st.divider()
@@ -473,9 +415,6 @@ if st.session_state.history:
             st.write(item["Article"])
 
 
-# =========================================================
-# DISCLAIMER
-# =========================================================
 
 st.divider()
 
