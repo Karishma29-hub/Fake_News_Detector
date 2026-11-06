@@ -1,10 +1,7 @@
 
 import re
-from pathlib import Path
-
 import joblib
 import streamlit as st
-
 
 st.set_page_config(
     page_title="Fake News Detector",
@@ -12,116 +9,200 @@ st.set_page_config(
     layout="wide"
 )
 
+
 st.markdown("""
 <style>
 
-.stApp {
-    background: linear-gradient(135deg, #f4f7ff, #edf2ff);
+/* PAGE BACKGROUND */
+
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"] {
+    background: #f5f7ff !important;
+    color: #1e293b !important;
 }
 
 .block-container {
-    padding-top: 2rem;
-    padding-bottom: 3rem;
-    max-width: 1200px;
+    max-width: 950px !important;
+    padding-top: 1.2rem !important;
+    padding-bottom: 2rem !important;
 }
 
+
+/* TEXT VISIBILITY */
+
+.stApp p,
+.stApp label,
+.stApp [data-testid="stMarkdownContainer"],
+.stApp [data-testid="stMarkdownContainer"] p,
+.stApp [data-testid="stMarkdownContainer"] h1,
+.stApp [data-testid="stMarkdownContainer"] h2,
+.stApp [data-testid="stMarkdownContainer"] h3,
+.stApp [data-testid="stExpander"] summary,
+.stApp [data-testid="stMetricLabel"],
+.stApp [data-testid="stMetricValue"] {
+    color: #1e293b !important;
+}
+
+
+/* HERO HEADER */
+
 .hero {
-    background: linear-gradient(120deg, #172554, #4338ca, #6366f1);
-    padding: 35px;
-    border-radius: 20px;
-    color: white;
+    background: linear-gradient(
+        120deg,
+        #172554,
+        #4338ca,
+        #6366f1
+    );
+    padding: 25px 20px;
+    border-radius: 16px;
+    color: white !important;
     text-align: center;
-    margin-bottom: 25px;
-    box-shadow: 0 8px 25px rgba(67, 56, 202, 0.2);
+    margin-bottom: 20px;
+    box-shadow: 0 5px 18px rgba(67, 56, 202, 0.16);
 }
 
 .hero h1 {
-    color: white;
-    font-size: 38px;
-    margin-bottom: 10px;
+    color: white !important;
+    font-size: 30px !important;
+    margin-bottom: 8px;
 }
 
 .hero p {
-    color: #e0e7ff;
-    font-size: 16px;
+    color: #e0e7ff !important;
+    font-size: 14px;
+    margin-bottom: 0;
 }
 
-.section-card {
-    background: white;
-    padding: 22px;
-    border-radius: 16px;
-    border: 1px solid #e0e7ff;
-    box-shadow: 0 4px 15px rgba(30, 64, 175, 0.07);
-    margin-bottom: 18px;
+
+/* SECTION HEADINGS */
+
+.stApp h2,
+.stApp h3 {
+    color: #1e3a8a !important;
+}
+
+
+/* RESULT AND METRIC CARDS */
+
+.result-card,
+.metric-card {
+    background: white !important;
+    padding: 18px;
+    border-radius: 13px;
+    border: 1px solid #dbeafe;
+    box-shadow: 0 3px 12px rgba(30, 64, 175, 0.06);
+    margin-bottom: 12px;
 }
 
 .result-card {
-    background: white;
-    padding: 25px;
-    border-radius: 16px;
-    border: 1px solid #dbeafe;
     text-align: center;
-    box-shadow: 0 5px 18px rgba(30, 64, 175, 0.08);
 }
 
 .metric-card {
-    background: white;
-    padding: 20px;
-    border-radius: 14px;
-    border: 1px solid #e0e7ff;
     text-align: center;
 }
 
 .metric-card h3 {
-    color: #334155;
-    font-size: 17px;
+    color: #334155 !important;
+    font-size: 16px;
 }
 
 .metric-card p {
-    font-size: 28px;
+    font-size: 25px;
     font-weight: bold;
     margin: 5px;
 }
 
+
+/* BUTTONS */
+
 div.stButton > button {
-    border-radius: 10px;
+    border-radius: 9px;
     border: 1px solid #c7d2fe;
-    background: white;
-    color: #3730a3;
+    background: white !important;
+    color: #3730a3 !important;
     font-weight: 600;
-    padding: 10px;
+    padding: 9px;
     transition: 0.2s;
 }
 
 div.stButton > button:hover {
-    background: #eef2ff;
-    border-color: #6366f1;
-    color: #312e81;
+    background: #eef2ff !important;
+    border-color: #6366f1 !important;
+    color: #312e81 !important;
 }
+
+
+/* NEWS TEXT AREA */
 
 div[data-testid="stTextArea"] textarea {
-    border-radius: 12px;
-    border: 1px solid #c7d2fe;
+    background: white !important;
+    color: #1e293b !important;
+    border: 1px solid #c7d2fe !important;
+    border-radius: 10px;
+    font-size: 14px;
 }
 
-h2, h3 {
-    color: #1e3a8a;
+div[data-testid="stTextArea"] label {
+    color: #334155 !important;
+}
+
+
+/* EXPANDER */
+
+[data-testid="stExpander"] {
+    background: white !important;
+    border: 1px solid #dbeafe !important;
+    border-radius: 10px;
+}
+
+[data-testid="stExpander"] summary {
+    color: #1e3a8a !important;
+}
+
+
+/* CHART */
+
+[data-testid="stVegaLiteChart"] {
+    background: white !important;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+
+/* PROGRESS BAR */
+
+.stProgress > div > div > div > div {
+    background: #4f46e5 !important;
+}
+
+
+/* DISCLAIMER */
+
+.stCaption,
+.stApp small {
+    color: #64748b !important;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-
 @st.cache_resource
 def load_model():
+
     model = joblib.load("model/fake_news_model.pkl")
     vectorizer = joblib.load("model/tfidf_vectorizer.pkl")
+
     return model, vectorizer
 
 
 try:
+
     model, vectorizer = load_model()
+
 except Exception as e:
+
     st.error(f"Unable to load model files: {e}")
     st.stop()
 
@@ -134,6 +215,7 @@ if "news_text_input" not in st.session_state:
 
 if "show_paste_message" not in st.session_state:
     st.session_state.show_paste_message = False
+
 
 
 real_news = (
@@ -152,28 +234,41 @@ fake_news = (
 
 
 def load_article(article):
+
     st.session_state.news_text_input = article
     st.session_state.show_paste_message = False
+
     st.session_state.pop("last_prediction", None)
 
 
 def paste_own_article():
+
     st.session_state.news_text_input = ""
     st.session_state.show_paste_message = True
+
     st.session_state.pop("last_prediction", None)
 
 
 def clear_article():
+
     st.session_state.news_text_input = ""
     st.session_state.show_paste_message = False
+
     st.session_state.pop("last_prediction", None)
-    
+
+
 def clean_text(text):
+
     text = text.lower()
+
     text = re.sub(r"http\S+|www\S+|https\S+", "", text)
+
     text = re.sub(r"[^a-zA-Z0-9\s]", "", text)
+
     text = re.sub(r"\s+", " ", text)
+
     return text.strip()
+
 
 
 st.markdown("""
@@ -185,6 +280,7 @@ st.markdown("""
     </p>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 with st.expander("🤖 About the Model"):
@@ -203,6 +299,7 @@ with st.expander("🤖 About the Model"):
     st.write("**Training Articles:** 35,918")
     st.write("**Testing Articles:** 8,980")
 
+
 st.markdown("### 🧪 Choose Your News Input")
 
 st.write(
@@ -212,6 +309,7 @@ st.write(
 col1, col2, col3 = st.columns(3)
 
 with col1:
+
     st.button(
         "✅ Real News",
         use_container_width=True,
@@ -220,6 +318,7 @@ with col1:
     )
 
 with col2:
+
     st.button(
         "❌ Fake News",
         use_container_width=True,
@@ -228,6 +327,7 @@ with col2:
     )
 
 with col3:
+
     st.button(
         "📝 Paste Your Own",
         use_container_width=True,
@@ -236,6 +336,7 @@ with col3:
 
 
 if st.session_state.show_paste_message:
+
     st.info("You can now paste your own news article below.")
 
 
@@ -243,20 +344,23 @@ st.markdown("### 📰 Enter News Article")
 
 news_text = st.text_area(
     "Paste your article here:",
-    height=220,
+    height=170,
     placeholder="Paste or type your news article here...",
     key="news_text_input"
 )
 
+
 col1, col2 = st.columns(2)
 
 with col1:
+
     analyze_button = st.button(
         "🔍 Analyze News",
         use_container_width=True
     )
 
 with col2:
+
     st.button(
         "🗑️ Clear Article",
         use_container_width=True,
@@ -264,10 +368,10 @@ with col2:
     )
 
 
-
 if analyze_button:
 
     if not news_text.strip():
+
         st.warning("⚠️ Please enter a news article first.")
 
     else:
@@ -275,11 +379,13 @@ if analyze_button:
         cleaned_text = clean_text(news_text)
 
         if not cleaned_text:
+
             st.warning("Please enter meaningful news text.")
 
         else:
 
             try:
+
                 text_tfidf = vectorizer.transform([cleaned_text])
 
                 prediction = model.predict(text_tfidf)[0]
@@ -292,6 +398,7 @@ if analyze_button:
                 real_index = classes.index(1)
 
                 fake_probability = probabilities[fake_index] * 100
+
                 real_probability = probabilities[real_index] * 100
 
                 confidence = max(
@@ -300,8 +407,11 @@ if analyze_button:
                 )
 
                 if prediction == 0:
+
                     result_text = "FAKE NEWS"
+
                 else:
+
                     result_text = "REAL NEWS"
 
                 st.session_state.last_prediction = {
@@ -319,8 +429,13 @@ if analyze_button:
                 })
 
             except Exception as e:
+
                 st.error(f"Prediction error: {e}")
-                
+
+
+# =========================================================
+# DISPLAY PREDICTION RESULT
+# =========================================================
 
 if "last_prediction" in st.session_state:
 
@@ -334,8 +449,10 @@ if "last_prediction" in st.session_state:
 
         st.markdown("""
         <div class="result-card">
-            <h2 style="color:#dc2626;">❌ FAKE NEWS</h2>
-            <p style="color:#64748b;">
+            <h2 style="color:#dc2626 !important;">
+                ❌ FAKE NEWS
+            </h2>
+            <p style="color:#475569 !important;">
                 The model identified this article as Fake News.
             </p>
         </div>
@@ -345,8 +462,10 @@ if "last_prediction" in st.session_state:
 
         st.markdown("""
         <div class="result-card">
-            <h2 style="color:#16a34a;">✅ REAL NEWS</h2>
-            <p style="color:#64748b;">
+            <h2 style="color:#16a34a !important;">
+                ✅ REAL NEWS
+            </h2>
+            <p style="color:#475569 !important;">
                 The model identified this article as Real News.
             </p>
         </div>
@@ -358,7 +477,7 @@ if "last_prediction" in st.session_state:
 
     st.progress(result["confidence"] / 100)
 
-    st.markdown(
+    st.write(
         f"**Confidence: {result['confidence']:.2f}%**"
     )
 
@@ -371,7 +490,7 @@ if "last_prediction" in st.session_state:
         st.markdown(f"""
         <div class="metric-card">
             <h3>❌ Fake News</h3>
-            <p style="color:#dc2626;">
+            <p style="color:#dc2626 !important;">
                 {result['fake_probability']:.2f}%
             </p>
         </div>
@@ -382,7 +501,7 @@ if "last_prediction" in st.session_state:
         st.markdown(f"""
         <div class="metric-card">
             <h3>✅ Real News</h3>
-            <p style="color:#16a34a;">
+            <p style="color:#16a34a !important;">
                 {result['real_probability']:.2f}%
             </p>
         </div>
@@ -412,6 +531,7 @@ if st.session_state.history:
         with st.expander(
             f"{i}. {item['Prediction']} — {item['Confidence']}"
         ):
+
             st.write(item["Article"])
 
 
